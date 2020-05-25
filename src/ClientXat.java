@@ -106,15 +106,6 @@ class EscripturaFil extends Thread {
 	}
 
 	public void run() {
-		//FuncioResumMD5Fitxer hashMsg = new FuncioResumMD5Fitxer();
-		XifratgeSimetric xsDES = null;
-		try {
-			xsDES = new XifratgeSimetric();
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		} catch (NoSuchPaddingException e) {
-			e.printStackTrace();
-		}
 		try {
 			OutputStream outStream = socol.getOutputStream();
 			PrintWriter sortida = new PrintWriter(outStream, true);
@@ -124,14 +115,7 @@ class EscripturaFil extends Thread {
 			do {
 				System.out.print("Entra missatge: ");
 				missatge = entradaTeclat.nextLine();
-				byte[] textXifrat = xsDES.xifratgeSimetric(missatge);
-				//hashMsg.generarMD5(a);
-				String text = textXifrat.toString();
-				sortida.println(text);
-				System.out.println(text);
-				String textDesxifrat = xsDES.desxifraSimetric(textXifrat);
-				sortida.println(textDesxifrat);
-				System.out.println(textDesxifrat);
+				sortida.println(missatge);
 			} while (!missatge.equals("FINAL"));
 			socol.close();
 		} catch (UnknownHostException e) {
@@ -139,12 +123,6 @@ class EscripturaFil extends Thread {
 			e.printStackTrace();
 		} catch (IOException e) {
 			System.out.println("problemes E/S");
-		} catch (InvalidKeyException e) {
-			e.printStackTrace();
-		} catch (BadPaddingException e) {
-			e.printStackTrace();
-		} catch (IllegalBlockSizeException e) {
-			e.printStackTrace();
 		}
 
 	}

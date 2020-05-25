@@ -1,9 +1,14 @@
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -41,19 +46,18 @@ class FilXat implements Runnable {
 	}
 
 	public void run() {
+		XifratgeSimetric xsDES = null;
 		try {
+			xsDES = new XifratgeSimetric();
 			try {
 				InputStream inStream = socolEntrant.getInputStream();
 				Scanner entrada = new Scanner(inStream);
 				OutputStream outStream = socolEntrant.getOutputStream();
 				PrintWriter sortida = new PrintWriter(outStream, true /* autoFlush */);
-				sortida.println("sdafweqfefewffewfewf");
-				sortida.println("Hola, asdfas");
-				sortida.println("sadas per acabar");
-				sortida.println("aeqerqw");
-				sortida.println("a");
-
-
+				String missatge = entrada.nextLine();
+				byte[] textXifrat = xsDES.xifratgeSimetric(missatge);
+				String text = textXifrat.toString();
+				sortida.println(text);
 				// echo client input
 				boolean fet = false;
 				while (!fet && entrada.hasNextLine()) {
@@ -61,19 +65,32 @@ class FilXat implements Runnable {
 					for(Socket item: ServidorXat.socols){
 						OutputStream out = item.getOutputStream();
 						PrintWriter sor = new PrintWriter(out, true /* autoFlush */);
-						sor.println(linia);
+						String textDesxifrat = xsDES.desxifraSimetric(textXifrat);
+						sor.println(textDesxifrat + "text desxifrat");
+						//sor.println(text + "text xifrat");
+						System.out.println(textDesxifrat + "holaaaaa");
+						//sor.println(linia);
 					}
-				
 					if (linia.trim().equals("FINAL"))
 						fet = true;
 				}
+			} catch (BadPaddingException e) {
+				e.printStackTrace();
+			} catch (IllegalBlockSizeException e) {
+				e.printStackTrace();
+			} catch (InvalidKeyException e) {
+				e.printStackTrace();
 			} finally {
 				socolEntrant.close();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+		}catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (NoSuchPaddingException e) {
+			e.printStackTrace();
 		}
 	}
 
-	
+
 }
