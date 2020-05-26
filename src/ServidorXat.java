@@ -52,26 +52,18 @@ class FilXat implements Runnable {
 			try {
 				InputStream inStream = socolEntrant.getInputStream();
 				Scanner entrada = new Scanner(inStream);
-				OutputStream outStream = socolEntrant.getOutputStream();
-				PrintWriter sortida = new PrintWriter(outStream, true /* autoFlush */);
-				String missatge = entrada.nextLine();
-				byte[] textXifrat = xsDES.xifratgeSimetric(missatge);
-				String text = textXifrat.toString();
-				sortida.println(text);
-				// echo client input
 				boolean fet = false;
 				while (!fet && entrada.hasNextLine()) {
-					String linia = entrada.nextLine();
+					String missatge = entrada.nextLine();
+					byte[] textXifrat = xsDES.xifratgeSimetric(missatge);
+					String text = textXifrat.toString();
 					for(Socket item: ServidorXat.socols){
 						OutputStream out = item.getOutputStream();
 						PrintWriter sor = new PrintWriter(out, true /* autoFlush */);
 						String textDesxifrat = xsDES.desxifraSimetric(textXifrat);
 						sor.println(textDesxifrat + "text desxifrat");
-						//sor.println(text + "text xifrat");
-						System.out.println(textDesxifrat + "holaaaaa");
-						//sor.println(linia);
 					}
-					if (linia.trim().equals("FINAL"))
+					if (missatge.trim().equals("FINAL"))
 						fet = true;
 				}
 			} catch (BadPaddingException e) {
