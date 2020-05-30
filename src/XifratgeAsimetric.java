@@ -13,10 +13,10 @@ import javax.crypto.NoSuchPaddingException;
 
 public class XifratgeAsimetric {
 
-    public KeyPair crearClaus() throws NoSuchAlgorithmException {
+    public KeyPair crearClaus() throws NoSuchAlgorithmException, NoSuchPaddingException {
         System.out.println("Crear clave pública y privada");
         KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
-        keyGen.initialize(512);//tamaño de la clave
+        keyGen.initialize(1024);//tamaño de la clave
         KeyPair clavesRSA = keyGen.generateKeyPair();
         return clavesRSA;
     }

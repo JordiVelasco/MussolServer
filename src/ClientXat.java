@@ -72,13 +72,12 @@ class LecturaFil extends Thread {
 	public void run() {
 
 		try {
-
 			InputStream inStream = socol.getInputStream();
 			Scanner entrada = new Scanner(inStream);
 			while (true) {
 				String resposta = entrada.nextLine();
-				System.out.println("\nSERVER> " + resposta);
-
+				System.out.println(resposta);
+				System.out.println("Entra missatge: ");
 			}
 
 		} catch (UnknownHostException e) {
@@ -113,7 +112,7 @@ class EscripturaFil extends Thread {
 			String missatge = "";
 			sortida.write(missatge);
 			do {
-				System.out.print("Entra missatge: ");
+				System.out.println("Entra missatge: ");
 				missatge = entradaTeclat.nextLine();
 				sortida.println(missatge);
 			} while (!missatge.equals("FINAL"));
